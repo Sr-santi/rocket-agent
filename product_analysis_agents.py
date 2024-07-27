@@ -5,6 +5,10 @@ from crewai_tools import SerperDevTool
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
+from tools.browser_tools import BrowserTools
+from tools.search_tools import SearchTools
+from tools.utils import UtilityTools
+
 search_tool = SerperDevTool()
 
 # Load environment variables from .env file
@@ -17,29 +21,28 @@ default_llm = ChatGroq(
     api_key=os.getenv('GROQ_API_KEY')
 )
 
-class ConversationAnalysisAgents():
-    # I need to compare good evaluations here, i don't have that data
-    # TODO: Create dataset with good conversations
-    def process_evaluator(self):
+class MarketAnalysisAgents():
+    # TODO: Create Social media analyzer agent
+    def e_commerce_analyzer(self):
         return Agent(
-            role='Conversation Evaluator',
-            goal="""Evaluate the quality of the evaluation result to check
-            if it's accurate.""",
-            backstory="""You are an expert in customer service analysis. 
-            You are responsible for evaluating and providing insights on 
-            the quality of the evaluation.""",
-            verbose=False,
+            role='E-commerce analyzer',
+            goal="""Use the tools to scrap the web and extract price and keywords
+            related with the product service you need to search.""",
+            backstory="""Develop an advanced e-commerce web scraping agent capable of 
+            autonomously navigating through various e-commerce sites and relevant web pages. 
+            This agent should be equipped with tools like Selenium for browser automation 
+            and Beautiful Soup for parsing HTML content. The core functionalities should 
+            include extracting prices, detecting keywords for SEO analysis, and aggregating customer comments for sentiment analysis. 
+            Integrate proxy management to handle IP blocking and CAPTCHA-solving services to manage site access challenges. 
+            The agent should also incorporate a simple user interface where users can input target URLs and receive structured 
+            data outputs (like CSV files) containing the extracted information. Optionally, implement machine learning algorithms 
+            to refine keyword extraction and sentiment analysis based on evolving data trends.""",
+            tools=[
+                BrowserTools.scrape_and_summarize_website,
+                SearchTools.search_internet,
+                UtilityTools.sentiment_analysis,
+                UtilityTools.jigsawstack_scraper
+            ],
+            verbose=True,
             llm=default_llm,
-        )
-    # WE NEED CONTEXT OF BOTH due to the row data not separated
-    def voice_call_evaluator(self):
-        return Agent(
-            role='Voice call analyzer',
-            goal="""Determine the effectiveness of the conversation and provide
-            insights for improving the prompts used to sell auto insurance policies""",
-            backstory="""You're a researcher at a large insurance company.
-            You're responsible for analyzing data and providing insights
-            to the business.""",
-            verbose=False,
-            llm=default_llm, 
         )

@@ -1,36 +1,31 @@
-import random
 from textwrap import dedent
 
 from crewai import Crew
 from dotenv import load_dotenv
 
-from tools.readCSV import read_and_display_csv
-from product_analysis_agents import ConversationAnalysisAgents
-from product_analysis_tasks import VoiceAnalysisTasks
+from product_analysis_agents import MarketAnalysisAgents
+from product_analysis_tasks import MarketAnalysisTasks
 
 import agentops
-agentops.init()
-
 load_dotenv()
+agentops.init()
 
 class VoiceAnalysisCrew:
 
   def run(self, transcription):
-    agents = ConversationAnalysisAgents()
-    tasks = VoiceAnalysisTasks()
+    agents = MarketAnalysisAgents()
+    tasks = MarketAnalysisTasks()
 
-    process_evaluator_agent = agents.process_evaluator()
-    voice_call_evaluator_agent = agents.voice_call_evaluator()
+    web_agent = agents.e_commerce_analyzer()
 
-    conversation_analysis = tasks.conversation_analysis_task(process_evaluator_agent,
+    conversation_analysis = tasks.conversation_analysis_task(web_agent,
                                                              transcription)
-    conversation_results_evaluation = tasks.results_evaluation(voice_call_evaluator_agent, 
+    conversation_results_evaluation = tasks.results_evaluation(web_agent, 
                                                         conversation_analysis)
 
     crew = Crew(
       agents=[
-        voice_call_evaluator_agent,
-        process_evaluator_agent,
+        web_agent
       ],
       tasks=[
         conversation_analysis,
@@ -43,18 +38,12 @@ class VoiceAnalysisCrew:
     return result
 
 if __name__ == "__main__":
-  print("## Welcome to Financial Analysis Crew")
+  print("## Welcome to Market Analysis Crew")
   print('-------------------------------')
-  file_path = 'example_files/interesse_information_rows.csv'
-  transcriptions = read_and_display_csv(file_path)
-  qa_results = []
-  random_transcriptions = random.sample(transcriptions, 5)
-  for transcription in random_transcriptions:
-    voice_qa_crew = VoiceAnalysisCrew()
-    result = voice_qa_crew.run(transcription)
-    qa_results.append(result)
+  voice_qa_crew = VoiceAnalysisCrew()
+  result = voice_qa_crew.run()
   
   print("\n\n########################")
   print("## Here is the Report")
   print("########################\n")
-  print(qa_results)
+  print(result)

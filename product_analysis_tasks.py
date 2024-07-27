@@ -14,7 +14,7 @@ evaluation_criteria = """
 8. Customer Effort Score (CES): How much effort did the customer have to put in to get their issue resolved?
 """
 
-class VoiceAnalysisTasks():
+class MarketAnalysisTasks():
   def results_evaluation(self, agent, results): 
     return Task(description=dedent(f"""
         Evaluate the quality of the results based on the following criteria:
