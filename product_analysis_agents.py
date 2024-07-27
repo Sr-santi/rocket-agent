@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
 from tools.browser_tools import BrowserTools
+from tools.gigasawstack_sentiment import GigsawstackSentiment
+from tools.gigsawstack_scraper import GigsawstackScraper
 from tools.search_tools import SearchTools
-from tools.utils import UtilityTools
 
 search_tool = SerperDevTool()
 
@@ -17,7 +18,8 @@ load_dotenv()
 default_llm = ChatGroq(
     temperature=0.5,
     # model="llama3-70b-8192",
-    model="llama-3.1-70b-versatile",
+    # model="llama-3.1-70b-versatile",
+    model="llama3-groq-70b-8192-tool-use-preview",
     api_key=os.getenv('GROQ_API_KEY')
 )
 
@@ -40,8 +42,8 @@ class MarketAnalysisAgents():
             tools=[
                 BrowserTools.scrape_and_summarize_website,
                 SearchTools.search_internet,
-                UtilityTools.sentiment_analysis,
-                UtilityTools.jigsawstack_scraper
+                GigsawstackSentiment,
+                GigsawstackScraper,
             ],
             verbose=True,
             llm=default_llm,

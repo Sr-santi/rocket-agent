@@ -12,16 +12,16 @@ agentops.init()
 
 class VoiceAnalysisCrew:
 
-  def run(self, transcription):
+  def run(self, product):
     agents = MarketAnalysisAgents()
     tasks = MarketAnalysisTasks()
 
     web_agent = agents.e_commerce_analyzer()
 
-    conversation_analysis = tasks.conversation_analysis_task(web_agent,
-                                                             transcription)
-    conversation_results_evaluation = tasks.results_evaluation(web_agent, 
-                                                        conversation_analysis)
+    conversation_analysis = tasks.e_commerce_evaluation(web_agent,
+                                                             product)
+    conversation_results_evaluation = tasks.web_search_analysis_task(web_agent, 
+                                                        product)
 
     crew = Crew(
       agents=[
@@ -41,7 +41,7 @@ if __name__ == "__main__":
   print("## Welcome to Market Analysis Crew")
   print('-------------------------------')
   voice_qa_crew = VoiceAnalysisCrew()
-  result = voice_qa_crew.run()
+  result = voice_qa_crew.run("Razer")
   
   print("\n\n########################")
   print("## Here is the Report")

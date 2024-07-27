@@ -4,38 +4,51 @@ from crewai import Task
 
 # Define the evaluation criteria for the conversations
 evaluation_criteria = """
-1. First Call Resolution (FCR): Was the issue resolved on the first interaction?
-2. Average Handle Time (AHT): Was the conversation efficient?
-3. Customer Satisfaction (CSAT): Was the customer satisfied with the interaction?
-4. Net Promoter Score (NPS): Would the customer recommend the service?
-5. Service Level: Was the response time within acceptable limits?
-6. Call Abandonment Rate: Did the customer abandon the chat before resolution?
-7. Transfer Rate: Was the conversation transferred to another agent or department?
-8. Customer Effort Score (CES): How much effort did the customer have to put in to get their issue resolved?
+	1.	Keyword Relevance: Prioritize keywords that directly relate to the core products or services.
+	2.	Search Volume: Include keywords with a high search volume to maximize visibility.
+	3.	Competition Level: Identify low-competition keywords to increase the chances of ranking higher.
+	4.	Trend Analysis: Utilize tools to detect trending keywords and include them in the search process.
+	5.	Contextual Fit: Ensure keywords fit naturally within the content to improve SEO and user experience.
 """
 
 class MarketAnalysisTasks():
-  def results_evaluation(self, agent, results): 
+  def e_commerce_evaluation(self, agent, product): 
     return Task(description=dedent(f"""
-        Evaluate the quality of the results based on the following criteria:
-        {evaluation_criteria}
+        This is the product / service you need to search: {product}
+        Search in the main e-commerce sites like:
+        - Amazon
+        - Ebay
+        - Alibaba
+        - Taobao
         
-        Results:
-        {results}
+        Review prices (values, ranges), review comments and what the people commented
+        about an specific product / service
+        Create a report that give us the range of prices and the keyword for this search
+        
+        take in mind the next evaluation criteria:
+        {evaluation_criteria}
       """),
       agent=agent,
-      expected_output= "a boolean that represents if the evaluation is correct or not",
-      context=[results]
+      expected_output= "{'lowerPrice': number, 'higherPrice': number, 'keywords': [string]}",
     )
-  def conversation_analysis_task(self, agent, transcript):
+  def web_search_analysis_task(self, agent, product):
     return Task(
-    description=f"""Evaluate the quality of the conversation between a chatbot and a 
-    human based on the following criteria:
-    {evaluation_criteria}
+    description=f"""
+    This is the product / service you need to search: {product}
+    Conduct focused research on [Product/Service Name] for content creation:
+
+    1.	Keywords: Use tools like Google Keyword Planner to find relevant keywords.
+    2.	Pricing: Compare prices across platforms and note competitor discounts.
+    3.	Consumer Feedback: Read reviews on e-commerce sites and forums to understand customer perceptions.
+    4.	General Info: Gather features and benefits from official and third-party sources.
     
-    conversation transcription:
-    {transcript}
+    evaluation_criteria:
+    {evaluation_criteria}
     """,
-    expected_output='a bullet point of the concise details of the evaluation',
+    expected_output="""
+    [keywords]
+    [reviews / feedback]
+    [general information around product/service]
+    """,
     agent=agent,
 )
