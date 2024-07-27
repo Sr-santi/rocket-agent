@@ -8,6 +8,9 @@ from tools.readCSV import read_and_display_csv
 from product_analysis_agents import ConversationAnalysisAgents
 from product_analysis_tasks import VoiceAnalysisTasks
 
+import agentops
+agentops.init()
+
 load_dotenv()
 
 class VoiceAnalysisCrew:

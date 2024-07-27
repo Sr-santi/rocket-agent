@@ -11,8 +11,9 @@ search_tool = SerperDevTool()
 load_dotenv()
 
 default_llm = ChatGroq(
-    temperature=0,
-    model="llama3-70b-8192",
+    temperature=0.5,
+    # model="llama3-70b-8192",
+    model="llama-3.1-70b-versatile",
     api_key=os.getenv('GROQ_API_KEY')
 )
 
