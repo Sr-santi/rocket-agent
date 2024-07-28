@@ -33,7 +33,7 @@ class SearchTools():
 
   @tool("Search news on the internet")
   def search_news(query):
-    """Useful to search news about a company, stock or any other
+    """Useful to search news about trends, popular events, people or any other
     topic and return relevant results"""""
     top_result_to_return = 4
     url = "https://google.serper.dev/news"

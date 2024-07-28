@@ -1,10 +1,10 @@
-import json
+
 import os
 
 import requests
 from crewai_tools import BaseTool
 from dotenv import load_dotenv
-from langchain.tools import tool
+
 
 load_dotenv()
 
@@ -20,9 +20,9 @@ class GigsawstackSentiment(BaseTool):
 
         headers = {"content-type":"application/json",
         "x-api-key":os.getenv('JIGSAWSTACK_API_KEY')}
-
-        response = requests.request("POST", url, data=payload, headers=headers)
-
-        return response
+        print('payload',payload)
+        response = requests.post(url, headers=headers, json=headers)
+        print(' response', response.json())
+        return response.json()
 
     

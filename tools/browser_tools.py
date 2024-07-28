@@ -1,12 +1,24 @@
 import json
 import os
+from langchain_groq import ChatGroq
 
 import requests
 from crewai import Agent, Task
 from langchain.tools import tool
 from unstructured.partition.html import partition_html
+from dotenv import load_dotenv
 
-
+# Load environment variables from .env file
+# load_dotenv()
+# default_llm = ChatGroq(
+#     temperature=0,
+#     # model="llama3-70b-8192",
+#     # model="llama-3.1-70b-versatile",
+#     # model="llama3-groq-70b-8192-tool-use-preview",
+#     model="llama3-groq-70b-8192-tool-use-preview",
+#     # model="mixtral-8x7b-32768",
+#     api_key=os.getenv('GROQ_API_KEY')
+# )
 class BrowserTools():
 
   @tool("Scrape website content")
@@ -19,20 +31,4 @@ class BrowserTools():
     elements = partition_html(text=response.text)
     content = "\n\n".join([str(el) for el in elements])
     content = [content[i:i + 8000] for i in range(0, len(content), 8000)]
-    summaries = []
-    for chunk in content:
-      agent = Agent(
-          role='Principal Researcher',
-          goal=
-          'Do amazing research and summaries based on the content you are working with',
-          backstory=
-          "You're a Principal Researcher at a big company and you need to do research about a given topic.",
-          allow_delegation=False)
-      task = Task(
-          agent=agent,
-          description=
-          f'Analyze and summarize the content below, make sure to include the most relevant information in the summary, return only the summary nothing else.\n\nCONTENT\n----------\n{chunk}'
-      )
-      summary = task.execute()
-      summaries.append(summary)
-    return "\n\n".join(summaries)
+    return content
